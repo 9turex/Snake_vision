@@ -4,16 +4,11 @@ import cv2
 import threading
 import queue
 
+from config import capture, body_cascade, cars2_cascade, cars_cascade
 #1 поток - собирать изображения в лист
 # 2 поток работает с листом и определяет есть ли на видео человек
 
-capture = cv2.VideoCapture('http://piercam.cofairhope.com/mjpg/video.mjpg')
-#capture = cv2.VideoCapture('video_test.mp4')
-
-body_cascade = cv2.CascadeClassifier('haarcascade_fullbody.xml')
-cars_cascade = cv2.CascadeClassifier('cars.xml')
-cars2_cascade = cv2.CascadeClassifier('haarcascade_car.xml')
-
+active_cascade = cars2_cascade
 q_image = queue.Queue()
 
 
@@ -26,14 +21,11 @@ def capture_reading(capture_content):
 def find_object(cascade):
     while True:
         image_from_queue = q_image.get()
-        cars = cascade.detectMultiScale(image_from_queue, scaleFactor=1.1, minSize=(10, 10), minNeighbors=3)
+        found_object = cascade.detectMultiScale(image_from_queue, scaleFactor=1.1, minSize=(10, 10), minNeighbors=3)
         image = cv2.cvtColor(image_from_queue, cv2.COLOR_BGR2GRAY)
-        for (x, y, w, h) in cars:
+        for (x, y, w, h) in found_object:
             cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 1, )
-        name_image = str(datetime.datetime.now()) + str(uuid.uuid4()) + 'car'
-
-
-
+        name_image = str(datetime.datetime.now()) + str(uuid.uuid4())
 
         cv2.imshow('Test start', image)
         k = cv2.waitKey(30) & 0xFF
@@ -44,7 +36,7 @@ def find_object(cascade):
 
 
 read_image = threading.Thread(target=capture_reading, args=(capture, ), daemon=True)
-find_some_object = threading.Thread(target=find_object, args=(cars2_cascade, ), daemon=True)
+find_some_object = threading.Thread(target=find_object, args=(active_cascade, ), daemon=True)
 
 
 if __name__ == '__main__':
