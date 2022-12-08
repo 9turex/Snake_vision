@@ -7,3 +7,8 @@ capture = cv2.VideoCapture('http://piercam.cofairhope.com/mjpg/video.mjpg')
 body_cascade = cv2.CascadeClassifier(str(Path('cascades', 'haarcascade_fullbody.xml')))
 cars_cascade = cv2.CascadeClassifier(str(Path('cascades', 'cars.xml')))
 cars2_cascade = cv2.CascadeClassifier(str(Path('cascades', 'haarcascade_car.xml')))
+
+visual_interface = True
+
+path_for_save = str(Path('objects', ))
+#print(path_for_save)
