@@ -8,7 +8,8 @@ body_cascade = cv2.CascadeClassifier(str(Path('cascades', 'haarcascade_fullbody.
 cars_cascade = cv2.CascadeClassifier(str(Path('cascades', 'cars.xml')))
 cars2_cascade = cv2.CascadeClassifier(str(Path('cascades', 'haarcascade_car.xml')))
 
-visual_interface = True
+visual_interface = False
 
-path_for_save = str(Path('objects', ))
+path_for_save = str(Path('objects'))
+#path_for_save = Path('objects', )
 #print(path_for_save)
